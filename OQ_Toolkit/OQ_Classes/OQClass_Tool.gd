@@ -23,7 +23,10 @@ func _ready():
 		child.parent_tool = self
 		_parts.append(child)
 	# If we have a root tool part, store it too.
-	if _root_grabbable_part != null:
+	
+	# NOTE: Should be checking exported property, not private variable...
+	# if _root_grabbable_part != null:
+	if root_grabbable_part != null:
 		_root_grabbable_part = find_node(root_grabbable_part)
 
 # warning-ignore:unused_argument
@@ -44,8 +47,11 @@ func release(controller):
 	if not controller in _controllers_grabbing:
 		return
 	if _controllers_to_parts[controller] == _root_grabbable_part:
-		_controllers_grabbing.empty()
-		_controllers_to_parts.empty()
+		# NOTE: Array.empty() returns a bool if the array is empty, it does not empty the array itself...
+		# _controllers_grabbing.empty()
+		# _controllers_to_parts.empty()
+		_controllers_grabbing = []
+		_controllers_to_parts = []
 	else:
 		_controllers_grabbing.remove(_controllers_grabbing.find(controller))
 		_controllers_to_parts.erase(controller)
