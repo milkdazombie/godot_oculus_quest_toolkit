@@ -93,10 +93,15 @@ func reparent_to_rigidbody(linear_velocity, angular_velocity):
 		for shape_owner_id in child.get_shape_owners():
 			var body_shape_owner_id = _placeholder_rigidbody.create_shape_owner(_placeholder_rigidbody)
 			var count = child.shape_owner_get_shape_count(shape_owner_id)
+			
+			# NOTE: For some reason, the collision shape transform scale gets reset to (1,1,1) when using child shape owner transforms
+			# Hacky solution for now (my project workflow) is to use child's own transform, since that will have appropriate user-set scale
 			_placeholder_rigidbody.shape_owner_set_transform(
 				body_shape_owner_id,
-				child.shape_owner_get_transform(shape_owner_id)
+				# child.shape_owner_get_transform(shape_owner_id)
+				child.transform
 			)
+			
 			for idx in range(count):
 				_placeholder_rigidbody.shape_owner_add_shape(
 					body_shape_owner_id,
